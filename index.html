@@ -43,6 +43,32 @@
             color: #ff0000;
             font-size: 2rem;
         }
+        /* NEW: Install button styling */
+        .install-container {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0 25px;
+        }
+        #installButton {
+            background: #0b5e23;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 6px 15px rgba(11,94,35,0.4);
+            transition: all 0.2s;
+            border: 2px solid #ffd700;
+        }
+        #installButton:hover {
+            background: #094a1c;
+            transform: scale(1.05);
+        }
         textarea {
             width: 100%;
             padding: 16px;
@@ -205,6 +231,13 @@
         <h1>YouTube Channel ID Extractor</h1>
         <p>Paste one YouTube channel URL per line below. Supports <strong>@handles</strong>, <strong>/channel/UC...</strong>, <strong>/c/...</strong>, and <strong>/user/...</strong> formats.</p>
         
+        <!-- NEW: Force install button -->
+        <div class="install-container">
+            <button id="installButton">
+                <span>📲</span> INSTALL APP (Add to Home Screen)
+            </button>
+        </div>
+
         <div class="info-note warning">
             ⚠️ <strong>Note:</strong> The API key in this code is the one you provided. If you want to keep it secure, consider generating a new key from 
             <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Google Cloud Console</a> and replacing it. But hey, you said you don't care, so we're rolling with it! 😎
@@ -269,6 +302,40 @@ https://youtube.com/@teranellefernandes</textarea>
 
         // YouTube API endpoint
         const API_BASE = 'https://youtube.googleapis.com/youtube/v3/channels';
+
+        // NEW: Install prompt variables
+        let deferredPrompt;
+        const installButton = document.getElementById('installButton');
+
+        // NEW: Listen for the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+            // Show the install button
+            installButton.style.display = 'flex';
+        });
+
+        // NEW: Handle install button click
+        installButton.addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                alert('App already installed or not available for installation right now. Try the browser menu → "Install" or "Add to Home screen"');
+                return;
+            }
+            // Show the install prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to install: ${outcome}`);
+            // Clear the saved prompt
+            deferredPrompt = null;
+            // Hide the button after use
+            installButton.style.display = 'none';
+        });
+
+        // Hide install button by default (will show when event fires)
+        installButton.style.display = 'none';
 
         const urlsInput = document.getElementById('urlsInput');
         const extractBtn = document.getElementById('extractBtn');
@@ -525,4 +592,4 @@ https://youtube.com/@teranellefernandes`;
         }
     </script>
 </body>
-</html>
+    </html>
