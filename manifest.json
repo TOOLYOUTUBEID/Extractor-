@@ -2,7 +2,7 @@
   "name": "YouTube Channel ID Extractor",
   "short_name": "YT ID Finder",
   "description": "Extract YouTube Channel IDs from URLs quickly",
-  "start_url": "/index.html",
+  "start_url": "/Extractor-/index.html",
   "display": "standalone",
   "background_color": "#f0f2f5",
   "theme_color": "#ff0000",
