@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Channel ID Extractor + Copy</title>
+    <title>YouTube Channel ID Extractor · PWA</title>
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Theme color for browser UI -->
+    <meta name="theme-color" content="#ff0000">
     <style>
         * {
             box-sizing: border-box;
@@ -509,6 +513,15 @@ https://youtube.com/@glendyfernandes10
 https://youtube.com/@mosesjsaldanha
 https://youtube.com/@lesleyingoa
 https://youtube.com/@teranellefernandes`;
+        }
+
+        // Register Service Worker (for PWA)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('✅ Service Worker registered!', reg))
+                    .catch(err => console.log('❌ Service Worker registration failed: ', err));
+            });
         }
     </script>
 </body>
